@@ -57,6 +57,18 @@
             align-items: center;
         }
 
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
@@ -78,6 +90,36 @@
 
         nav a:hover {
             color: var(--navy-accent);
+        }
+
+        /* Language Switcher */
+        .language-switcher {
+            display: flex;
+            background: var(--gray-light);
+            border-radius: 50px;
+            padding: 0.3rem;
+            gap: 0.3rem;
+        }
+
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: transparent;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--navy);
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .lang-btn.active {
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .lang-btn:hover:not(.active) {
+            background: rgba(30, 41, 59, 0.1);
         }
 
         /* Hero Section */
@@ -416,10 +458,38 @@
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             width: calc(50% - 2rem);
+            display: flex;
+            gap: 1.5rem;
         }
 
         .timeline-item:nth-child(odd) .timeline-content {
             margin-left: auto;
+        }
+
+        .timeline-logo {
+            width: 80px;
+            height: 80px;
+            flex-shrink: 0;
+            background: var(--gray-light);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .timeline-logo-fallback {
+            font-size: 2.5rem;
+        }
+
+        .timeline-text {
+            flex: 1;
         }
 
         .timeline-date {
@@ -556,9 +626,34 @@
                 margin-left: 2rem !important;
             }
 
+            .timeline-logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            .timeline-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
             nav ul {
                 gap: 1rem;
                 font-size: 0.9rem;
+            }
+
+            .nav-left {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            nav .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .language-switcher {
+                align-self: flex-end;
             }
 
             .projects-grid {
@@ -576,14 +671,22 @@
     <!-- Navigation -->
     <nav>
         <div class="container">
-            <div class="logo">Portfolio</div>
-            <ul>
-                <li><a href="#hero">Accueil</a></li>
-                <li><a href="#about">À propos</a></li>
-                <li><a href="#projects">Projets</a></li>
-                <li><a href="#experience">Expérience</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
+            <div class="nav-left">
+                <div class="logo">Portfolio</div>
+                <ul>
+                    <li><a href="#hero" data-fr="Accueil" data-en="Home">Accueil</a></li>
+                    <li><a href="#about" data-fr="À propos" data-en="About">À propos</a></li>
+                    <li><a href="#projects" data-fr="Projets" data-en="Projects">Projets</a></li>
+                    <li><a href="#experience" data-fr="Expérience" data-en="Experience">Expérience</a></li>
+                    <li><a href="#contact" data-fr="Contact" data-en="Contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="nav-right">
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="fr">🇫🇷 FR</button>
+                    <button class="lang-btn" data-lang="en">🇬🇧 EN</button>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -591,7 +694,7 @@
     <section id="hero" class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1>Stanislas Dechezelles</h1>
+                <h1>Stanislas de Chezelles</h1>
                 <div class="subtitle" id="typewriter"></div>
                 <p>Spécialisé en finance quantitative et data science, je développe des solutions innovantes pour l'analyse financière, le trading algorithmique et la gestion de portefeuille.</p>
                 <a href="#projects" class="cta-button">Voir mes projets</a>
@@ -605,12 +708,12 @@
             <h2>À propos</h2>
             <div class="about-content">
                 <div class="profile-image-container">
-                    <img src="resources/ma-photo.jpg" alt="Stanislas Dechezelles" class="profile-image" 
+                    <img src="resources/ma-photo.jpg" alt="Stanislas de Chezelles" class="profile-image" 
                          onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'width:100%;aspect-ratio:1;background:linear-gradient(135deg,#1e293b,#3b82f6);border-radius:20px;display:flex;align-items:center;justify-content:center;color:white;font-size:4rem;font-weight:700;box-shadow:0 20px 60px rgba(0,0,0,0.2);border:5px solid white;\'>📊</div>'">
                 </div>
                 <div class="about-text">
-                    <h3>Analyste Financier & Data Scientist</h3>
-                    <p>Passionné par la finance quantitative et l'analyse de données, je combine expertise financière et compétences techniques pour créer des solutions innovantes dans le domaine de la finance.</p>
+                    <h3>Etudiant en deuxième année à l'ENSAE Paris</h3>
+                    <p>Passionné par la finance quantitative et l'analyse de données, je combine expertise financière et modélisation mathématiques pour créer des solutions innovantes dans le domaine de la finance.</p>
                     <p>Mon approche allie rigueur analytique, maîtrise des outils de data science et compréhension approfondie des marchés financiers pour générer des insights actionnables.</p>
                     
                     <div class="expertise-list">
@@ -645,13 +748,14 @@
             <div class="projects-grid">
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="resources/logo-trading.png" alt="Trading" class="project-logo" 
+                        <img src="resources/logo_qrt.jpg" alt="QRT Data Challenge" class="project-logo" 
                              onerror="this.outerHTML='<div style=\'font-size:4rem;\'>📈</div>'">
                     </div>
                     <div class="project-content">
-                        <span class="project-category">Trading Algorithmique</span>
-                        <h3 class="project-title">Stratégie de Trading Quantitatif</h3>
-                        <p class="project-description">Développement d'une stratégie de trading algorithmique basée sur l'analyse technique et le machine learning pour prédire les mouvements de marché.</p>
+                        <span class="project-category">Gestion de portefeuille</span>
+                        <h3 class="project-title"> Asset Allocation Performance forecasting</h3>
+                        <p class="project-description">Machine learning and statistical modeling in predicting daily asset allocation performance, identifying portfolios to
+long or short in a systematic trading context.</p>
                         <div class="project-stats">
                             <div class="stat-item">
                                 <span class="stat-label">Performance</span>
@@ -675,12 +779,12 @@
 
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="resources/logo-portfolio.png" alt="Portfolio" class="project-logo"
+                        <img src="resources/logo-hi-paris.jpg" alt="Hi!Paris DataBoot Camp" class="project-logo"
                              onerror="this.outerHTML='<div style=\'font-size:4rem;\'>💼</div>'">
                     </div>
                     <div class="project-content">
-                        <span class="project-category">Gestion de Portefeuille</span>
-                        <h3 class="project-title">Optimisation de Portefeuille</h3>
+                        <span class="project-category">RUL Spaceshift</span>
+                        <h3 class="project-title">Algorithme de classification avec du Deeplearning</h3>
                         <p class="project-description">Outil d'optimisation de portefeuille utilisant la théorie moderne du portefeuille et l'algorithme de Markowitz pour maximiser le ratio rendement/risque.</p>
                         <div class="project-stats">
                             <div class="stat-item">
@@ -705,7 +809,7 @@
 
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="resources/logo-ml.png" alt="Machine Learning" class="project-logo"
+                        <img src="resources/logo-quantcube.jpg" alt="SSSSSS" class="project-logo"
                              onerror="this.outerHTML='<div style=\'font-size:4rem;\'>🤖</div>'">
                     </div>
                     <div class="project-content">
@@ -833,28 +937,46 @@
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <div class="timeline-date">2023 - Présent</div>
-                        <h3 class="timeline-title">Analyste Quantitatif</h3>
-                        <div class="timeline-company">Société de Gestion d'Actifs</div>
-                        <p>Développement de modèles quantitatifs pour l'optimisation de portefeuille et l'analyse de risque. Création de stratégies de trading algorithmique.</p>
+                        <div class="timeline-logo">
+                            <img src="resources/qrt_logo.png" alt="Entreprise 1" 
+                                 onerror="this.parentElement.innerHTML='<div class=\'timeline-logo-fallback\'>💼</div>'">
+                        </div>
+                        <div class="timeline-text">
+                            <div class="timeline-date">202 - Présent</div>
+                            <h3 class="timeline-title">Analyste Quantitatif</h3>
+                            <div class="timeline-company">Société de Gestion d'Actifs</div>
+                            <p>Développement de modèles quantitatifs pour l'optimisation de portefeuille et l'analyse de risque. Création de stratégies de trading algorithmique.</p>
+                        </div>
                     </div>
                 </div>
 
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <div class="timeline-date">2021 - 2023</div>
-                        <h3 class="timeline-title">Data Analyst Finance</h3>
-                        <div class="timeline-company">Banque d'Investissement</div>
-                        <p>Analyse de données financières, création de dashboards et reporting pour l'aide à la décision. Automatisation des processus d'analyse.</p>
+                        <div class="timeline-logo">
+                            <img src="resources/logo-exp2.png" alt="Entreprise 2"
+                                 onerror="this.parentElement.innerHTML='<div class=\'timeline-logo-fallback\'>🏦</div>'">
+                        </div>
+                        <div class="timeline-text">
+                            <div class="timeline-date">2021 - 2023</div>
+                            <h3 class="timeline-title">Data Analyst Finance</h3>
+                            <div class="timeline-company">Banque d'Investissement</div>
+                            <p>Analyse de données financières, création de dashboards et reporting pour l'aide à la décision. Automatisation des processus d'analyse.</p>
+                        </div>
                     </div>
                 </div>
 
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <div class="timeline-date">2019 - 2021</div>
-                        <h3 class="timeline-title">Formation Finance & Data Science</h3>
-                        <div class="timeline-company">Grande École</div>
-                        <p>Formation approfondie en finance quantitative, statistiques et machine learning appliqués à la finance.</p>
+                        <div class="timeline-logo">
+                            <img src="resources/logo-exp3.png" alt="École"
+                                 onerror="this.parentElement.innerHTML='<div class=\'timeline-logo-fallback\'>🎓</div>'">
+                        </div>
+                        <div class="timeline-text">
+                            <div class="timeline-date">2019 - 2021</div>
+                            <h3 class="timeline-title">Formation Finance & Data Science</h3>
+                            <div class="timeline-company">Grande École</div>
+                            <p>Formation approfondie en finance quantitative, statistiques et machine learning appliqués à la finance.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -893,13 +1015,107 @@
                 <a href="#" target="_blank">LinkedIn</a>
                 <a href="#" target="_blank">Twitter</a>
             </div>
-            <p>&copy; 2025 Stanislas Dechezelles. Tous droits réservés.</p>
+            <p>&copy; 2025 Stanislas de Chezelles. Tous droits réservés.</p>
         </div>
     </footer>
 
     <script>
+        // Language data
+        const translations = {
+            fr: {
+                heroSubtitles: ["Analyste Quantitatif", "Data Scientist Finance", "Passionné de Finance Quant"],
+                heroCta: "Voir mes projets",
+                aboutTitle: "À propos",
+                aboutJobTitle: "Analyste Financier & Data Scientist",
+                projectsTitle: "Projets Finance",
+                projectsSubtitle: "Découvrez mes projets alliant finance quantitative, analyse de données et technologies modernes",
+                filterAll: "Tous",
+                experienceTitle: "Expérience",
+                contactTitle: "Contact",
+                contactName: "Nom",
+                contactEmail: "Email",
+                contactMessage: "Message",
+                contactSubmit: "Envoyer",
+                footerRights: "Tous droits réservés"
+            },
+            en: {
+                heroSubtitles: ["Quantitative Analyst", "Finance Data Scientist", "Quant Finance Enthusiast"],
+                heroCta: "View my projects",
+                aboutTitle: "About",
+                aboutJobTitle: "Financial Analyst & Data Scientist",
+                projectsTitle: "Finance Projects",
+                projectsSubtitle: "Discover my projects combining quantitative finance, data analysis and modern technologies",
+                filterAll: "All",
+                experienceTitle: "Experience",
+                contactTitle: "Contact",
+                contactName: "Name",
+                contactEmail: "Email",
+                contactMessage: "Message",
+                contactSubmit: "Send",
+                footerRights: "All rights reserved"
+            }
+        };
+
+        let currentLang = 'fr';
+
+        // Language switcher
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                if (lang === currentLang) return;
+                
+                currentLang = lang;
+                
+                // Update active button
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update navigation
+                document.querySelectorAll('nav a').forEach(link => {
+                    link.textContent = link.dataset[lang];
+                });
+                
+                // Update content
+                switchLanguage(lang);
+            });
+        });
+
+        function switchLanguage(lang) {
+            const t = translations[lang];
+            
+            // Update hero
+            document.querySelector('.cta-button').textContent = t.heroCta;
+            
+            // Update section titles
+            document.querySelector('#about h2').textContent = t.aboutTitle;
+            document.querySelector('.about-text h3').textContent = t.aboutJobTitle;
+            document.querySelector('.projects-header h2').textContent = t.projectsTitle;
+            document.querySelector('.projects-header p').textContent = t.projectsSubtitle;
+            document.querySelector('#experience h2').textContent = t.experienceTitle;
+            document.querySelector('#contact h2').textContent = t.contactTitle;
+            
+            // Update filter button
+            document.querySelector('.filter-btn.active').textContent = t.filterAll;
+            
+            // Update contact form
+            document.querySelector('label[for="name"]').textContent = t.contactName;
+            document.querySelector('label[for="email"]').textContent = t.contactEmail;
+            document.querySelector('label[for="message"]').textContent = t.contactMessage;
+            document.querySelector('.submit-button').textContent = t.contactSubmit;
+            
+            // Update footer
+            const footerText = document.querySelector('footer p');
+            footerText.textContent = `© 2025 Stanislas de Chezelles. ${t.footerRights}.`;
+            
+            // Restart typewriter with new language
+            texts = t.heroSubtitles;
+            textIndex = 0;
+            charIndex = 0;
+            isDeleting = false;
+        }
+
         // Typewriter effect
-        const texts = ["Analyste Quantitatif", "Data Scientist Finance", "Passionné de Finance Quant"];
+        let texts = translations.fr.heroSubtitles;
         let textIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
