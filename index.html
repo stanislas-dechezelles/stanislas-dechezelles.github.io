@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Portfolio</title>
+    <title>Portfolio Finance</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
     <style>
         :root {
             --navy: #1e293b;
@@ -274,7 +273,7 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
-}
+        }
 
         .project-image::before {
             content: '';
@@ -282,7 +281,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(135deg, rgba(30, 41, 59, 0.05), rgba(59, 130, 246, 0.05));
-}
+        }
 
         .project-logo {
             width: 120px;
@@ -291,7 +290,7 @@
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
             position: relative;
             z-index: 2;
-}
+        }
 
         .project-content {
             padding: 2rem;
@@ -536,6 +535,16 @@
 
             .about-content {
                 grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .profile-image-container {
+                max-width: 250px;
+                margin: 0 auto;
+            }
+
+            .expertise-list {
+                grid-template-columns: 1fr;
             }
 
             .timeline::before {
@@ -551,6 +560,15 @@
                 gap: 1rem;
                 font-size: 0.9rem;
             }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
         }
     </style>
 </head>
@@ -558,7 +576,7 @@
     <!-- Navigation -->
     <nav>
         <div class="container">
-            <div class="logo">Stanislas de Chezelles</div>
+            <div class="logo">Portfolio</div>
             <ul>
                 <li><a href="#hero">Accueil</a></li>
                 <li><a href="#about">À propos</a></li>
@@ -573,7 +591,7 @@
     <section id="hero" class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1>Stanislas de Chezelles</h1>
+                <h1>Stanislas Dechezelles</h1>
                 <div class="subtitle" id="typewriter"></div>
                 <p>Spécialisé en finance quantitative et data science, je développe des solutions innovantes pour l'analyse financière, le trading algorithmique et la gestion de portefeuille.</p>
                 <a href="#projects" class="cta-button">Voir mes projets</a>
@@ -587,8 +605,7 @@
             <h2>À propos</h2>
             <div class="about-content">
                 <div class="profile-image-container">
-                    <!-- Remplacez 'resources/ma-photo.jpg' par le chemin de votre photo -->
-                    <img src="resources/ma-photo.jpg" alt="Stanislas de Chezelles" class="profile-image" 
+                    <img src="resources/ma-photo.jpg" alt="Stanislas Dechezelles" class="profile-image" 
                          onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'width:100%;aspect-ratio:1;background:linear-gradient(135deg,#1e293b,#3b82f6);border-radius:20px;display:flex;align-items:center;justify-content:center;color:white;font-size:4rem;font-weight:700;box-shadow:0 20px 60px rgba(0,0,0,0.2);border:5px solid white;\'>📊</div>'">
                 </div>
                 <div class="about-text">
@@ -625,57 +642,72 @@
                 <button class="filter-btn">ML Finance</button>
             </div>
 
-            <div class="project-card">
-                <div class="project-image">
-                    <img src="resources/logo-qrt.png" alt="QRT" class="project-logo">
-                </div>
-                <div class="project-content">
-                    <span class="project-category">Trading Algorithmique</span>
-                    <h3 class="project-title">Projet QRT</h3>
-                    <p class="project-description">Développement d'une stratégie de trading quantitatif...</p>
-                    <div class="project-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">Performance</span>
-                            <span class="stat-value">+23.5%</span>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="resources/logo-trading.png" alt="Trading" class="project-logo" 
+                             onerror="this.outerHTML='<div style=\'font-size:4rem;\'>📈</div>'">
+                    </div>
+                    <div class="project-content">
+                        <span class="project-category">Trading Algorithmique</span>
+                        <h3 class="project-title">Stratégie de Trading Quantitatif</h3>
+                        <p class="project-description">Développement d'une stratégie de trading algorithmique basée sur l'analyse technique et le machine learning pour prédire les mouvements de marché.</p>
+                        <div class="project-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Performance</span>
+                                <span class="stat-value">+23.5%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Sharpe Ratio</span>
+                                <span class="stat-value">1.85</span>
+                            </div>
+                        </div>
+                        <div class="project-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">Pandas</span>
+                            <span class="tag">Backtrader</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#">→ Voir le code</a>
                         </div>
                     </div>
-                    <div class="project-tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">Pandas</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/votre-username/projet-qrt">→ Voir le code</a>
-                    </div>
                 </div>
-            </div>       
-
-
-            <div class="project-card">
-                <div class="project-image">
-                    <img src="resources/logo-qrt.png" alt="QRT" class="project-logo">
-                </div>
-                <div class="project-content">
-                    <span class="project-category">Trading Algorithmique</span>
-                    <h3 class="project-title">Projet QRT</h3>
-                    <p class="project-description">Développement d'une stratégie de trading quantitatif...</p>
-                    <div class="project-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">Performance</span>
-                            <span class="stat-value">+23.5%</span>
-                        </div>
-                    </div>
-                    <div class="project-tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">Pandas</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/votre-username/projet-qrt">→ Voir le code</a>
-                    </div>
-            </div>
-            </div>
 
                 <div class="project-card">
-                    <div class="project-image">🤖</div>
+                    <div class="project-image">
+                        <img src="resources/logo-portfolio.png" alt="Portfolio" class="project-logo"
+                             onerror="this.outerHTML='<div style=\'font-size:4rem;\'>💼</div>'">
+                    </div>
+                    <div class="project-content">
+                        <span class="project-category">Gestion de Portefeuille</span>
+                        <h3 class="project-title">Optimisation de Portefeuille</h3>
+                        <p class="project-description">Outil d'optimisation de portefeuille utilisant la théorie moderne du portefeuille et l'algorithme de Markowitz pour maximiser le ratio rendement/risque.</p>
+                        <div class="project-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Assets</span>
+                                <span class="stat-value">50+</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Optimisation</span>
+                                <span class="stat-value">Real-time</span>
+                            </div>
+                        </div>
+                        <div class="project-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">NumPy</span>
+                            <span class="tag">Scipy</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#">→ Voir le code</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="resources/logo-ml.png" alt="Machine Learning" class="project-logo"
+                             onerror="this.outerHTML='<div style=\'font-size:4rem;\'>🤖</div>'">
+                    </div>
                     <div class="project-content">
                         <span class="project-category">Machine Learning</span>
                         <h3 class="project-title">Prédiction de Prix d'Actions</h3>
@@ -702,7 +734,10 @@
                 </div>
 
                 <div class="project-card">
-                    <div class="project-image">📊</div>
+                    <div class="project-image">
+                        <img src="resources/logo-dashboard.png" alt="Dashboard" class="project-logo"
+                             onerror="this.outerHTML='<div style=\'font-size:4rem;\'>📊</div>'">
+                    </div>
                     <div class="project-content">
                         <span class="project-category">Analyse de Données</span>
                         <h3 class="project-title">Dashboard Financier Interactif</h3>
@@ -729,7 +764,10 @@
                 </div>
 
                 <div class="project-card">
-                    <div class="project-image">⚖️</div>
+                    <div class="project-image">
+                        <img src="resources/logo-risk.png" alt="Risk Management" class="project-logo"
+                             onerror="this.outerHTML='<div style=\'font-size:4rem;\'>⚖️</div>'">
+                    </div>
                     <div class="project-content">
                         <span class="project-category">Risk Management</span>
                         <h3 class="project-title">Analyse de Risque de Crédit</h3>
@@ -756,7 +794,10 @@
                 </div>
 
                 <div class="project-card">
-                    <div class="project-image">💹</div>
+                    <div class="project-image">
+                        <img src="resources/logo-sentiment.png" alt="Sentiment Analysis" class="project-logo"
+                             onerror="this.outerHTML='<div style=\'font-size:4rem;\'>💹</div>'">
+                    </div>
                     <div class="project-content">
                         <span class="project-category">Market Analysis</span>
                         <h3 class="project-title">Analyse de Sentiment de Marché</h3>
@@ -827,15 +868,15 @@
             <div class="contact-content">
                 <form class="contact-form">
                     <div class="form-group">
-                        <label for="name">de Chezelles Stanislas</label>
+                        <label for="name">Nom</label>
                         <input type="text" id="name" name="name" required>
                     </div>
                     <div class="form-group">
-                        <label for="email">stanislas.dechezelles@ensae.fr</label>
+                        <label for="email">Email</label>
                         <input type="email" id="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="message">0658987421</label>
+                        <label for="message">Message</label>
                         <textarea id="message" name="message" required></textarea>
                     </div>
                     <button type="submit" class="submit-button">Envoyer</button>
@@ -848,17 +889,17 @@
     <footer>
         <div class="container">
             <div class="social-links">
-                <a href="#">GitHub</a>
-                <a href="#">LinkedIn</a>
-                <a href="#">Twitter</a>
+                <a href="https://github.com/stanislas-dechezelles" target="_blank">GitHub</a>
+                <a href="#" target="_blank">LinkedIn</a>
+                <a href="#" target="_blank">Twitter</a>
             </div>
-            <p>&copy; 2025 Stanislas de Chezelles. Tous droits réservés.</p>
+            <p>&copy; 2025 Stanislas Dechezelles. Tous droits réservés.</p>
         </div>
     </footer>
 
     <script>
         // Typewriter effect
-        const texts = ["Analyste Quantitatif", "Data Scientist Finance", "Passionné de Finance Quantitative"];
+        const texts = ["Analyste Quantitatif", "Data Scientist Finance", "Passionné de Finance Quant"];
         let textIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
@@ -899,23 +940,8 @@
             btn.addEventListener('click', function() {
                 filterBtns.forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
-                // Ici vous pouvez ajouter la logique de filtrage si nécessaire
             });
-        });Index - 1);
-                charIndex--;
-                
-                if (charIndex === 0) {
-                    isDeleting = false;
-                    textIndex = (textIndex + 1) % texts.length;
-                    setTimeout(typeWriter, 500);
-                    return;
-                }
-            }
-            
-            setTimeout(typeWriter, isDeleting ? 50 : 100);
-        }
-
-        typeWriter();
+        });
 
         // Scroll animations
         const observerOptions = {
@@ -956,5 +982,4 @@
         });
     </script>
 </body>
-
 </html>
