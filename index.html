@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Finance</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <title>Stanislas de Chezelles - Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --navy: #1e293b;
-            --navy-light: #475569;
-            --navy-accent: #3b82f6;
-            --white: #ffffff;
-            --gray-light: #f8fafc;
-            --gray: #94a3b8;
+            --dark-bg: #0a0e27;
+            --darker-bg: #050816;
+            --accent-green: #00ff88;
+            --accent-blue: #00d4ff;
+            --accent-orange: #ff6b35;
+            --text-light: #e8e8e8;
+            --text-gray: #8b92a8;
+            --card-bg: rgba(15, 23, 42, 0.8);
+            --border-glow: rgba(0, 255, 136, 0.3);
         }
 
         * {
@@ -24,1108 +26,600 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            color: var(--navy);
-            line-height: 1.6;
+            background: var(--dark-bg);
+            color: var(--text-light);
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        h1, h2, h3 {
-            font-family: 'Playfair Display', serif;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Navigation */
-        nav {
+        /* Animated Background */
+        .trading-bg {
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: 100%;
+            z-index: 0;
+            opacity: 0.1;
         }
 
-        nav .container {
+        .grid-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--accent-blue) 1px, transparent 1px),
+                linear-gradient(90deg, var(--accent-blue) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .chart-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+        }
+
+        /* Ticker Tape */
+        .ticker-tape {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            border-top: 1px solid var(--accent-green);
+            padding: 0.5rem 0;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .ticker-content {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            animation: tickerScroll 30s linear infinite;
+            white-space: nowrap;
         }
 
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 3rem;
+        @keyframes tickerScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
-        .nav-right {
-            display: flex;
+        .ticker-item {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            padding: 0 2rem;
+            display: inline-flex;
             align-items: center;
-            gap: 2rem;
+            gap: 0.5rem;
         }
 
-        .logo {
-            font-size: 1.5rem;
+        .ticker-symbol {
+            color: var(--accent-blue);
             font-weight: 700;
-            color: var(--navy);
         }
 
-        nav ul {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
+        .ticker-price {
+            color: var(--text-light);
         }
 
-        nav a {
-            text-decoration: none;
-            color: var(--navy);
-            font-weight: 500;
-            transition: color 0.3s;
+        .ticker-change.positive {
+            color: var(--accent-green);
         }
 
-        nav a:hover {
-            color: var(--navy-accent);
+        .ticker-change.negative {
+            color: var(--accent-orange);
         }
 
         /* Language Switcher */
-        .language-switcher {
+        .lang-switcher {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1000;
             display: flex;
-            background: var(--gray-light);
+            gap: 0.5rem;
+            background: var(--card-bg);
+            padding: 0.5rem;
             border-radius: 50px;
-            padding: 0.3rem;
-            gap: 0.3rem;
+            border: 1px solid var(--border-glow);
         }
 
         .lang-btn {
             padding: 0.5rem 1rem;
-            border: none;
             background: transparent;
-            border-radius: 50px;
+            border: none;
+            color: var(--text-gray);
             cursor: pointer;
+            border-radius: 50px;
             font-weight: 600;
-            color: var(--navy);
             transition: all 0.3s;
             font-size: 0.9rem;
         }
 
         .lang-btn.active {
-            background: var(--navy);
-            color: var(--white);
+            background: var(--accent-green);
+            color: var(--darker-bg);
         }
 
-        .lang-btn:hover:not(.active) {
-            background: rgba(30, 41, 59, 0.1);
-        }
-
-        /* Hero Section */
-        .hero {
+        /* Main Container */
+        .main-container {
+            position: relative;
+            z-index: 1;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-            color: var(--white);
-            padding-top: 80px;
+            justify-content: center;
+            padding: 4rem 2rem 6rem;
         }
 
-        .hero-content {
-            opacity: 0;
-            animation: fadeInUp 1s forwards;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .hero .subtitle {
-            font-size: 1.5rem;
-            color: var(--gray-light);
-            margin-bottom: 2rem;
-            min-height: 2rem;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin-bottom: 2rem;
-            color: var(--gray-light);
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: var(--navy-accent);
-            color: var(--white);
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
-        }
-
-        /* Sections */
-        section {
-            padding: 5rem 0;
-        }
-
-        section h2 {
-            font-size: 3rem;
+        /* Header System */
+        .system-header {
             text-align: center;
             margin-bottom: 3rem;
-            color: var(--navy);
+            animation: fadeInDown 1s ease-out;
         }
 
-        /* About Section */
-        .about {
-            background: var(--gray-light);
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .profile-image-container {
-            position: relative;
-        }
-
-        .profile-image {
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: 20px;
-            object-fit: cover;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-            border: 5px solid var(--white);
-        }
-
-        .about-text h3 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            color: var(--navy);
-        }
-
-        .about-text p {
-            margin-bottom: 1.5rem;
-            color: var(--navy-light);
-            font-size: 1.05rem;
-        }
-
-        .expertise-list {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .expertise-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--navy);
-            font-weight: 500;
-        }
-
-        .expertise-item::before {
-            content: '▸';
-            color: var(--navy-accent);
-            font-size: 1.2rem;
-        }
-
-        /* Projects */
-        .projects {
-            background: var(--white);
-        }
-
-        .projects-header {
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto 3rem;
-        }
-
-        .projects-header p {
-            color: var(--navy-light);
-            font-size: 1.1rem;
-            margin-top: 1rem;
-        }
-
-        .projects-filter {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 0.7rem 1.5rem;
-            background: var(--gray-light);
-            border: 2px solid transparent;
-            border-radius: 50px;
-            color: var(--navy);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .filter-btn:hover, .filter-btn.active {
-            background: var(--navy);
-            color: var(--white);
-            border-color: var(--navy);
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2.5rem;
-        }
-
-        .project-card {
-            background: var(--white);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
-            opacity: 0;
-            transform: translateY(20px);
-            border: 1px solid rgba(30, 41, 59, 0.1);
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-        }
-
-        .project-image {
-            width: 100%;
-            height: 220px;
-            background: #f8fafc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .project-image::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.05), rgba(59, 130, 246, 0.05));
-        }
-
-        .project-logo {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
-            position: relative;
-            z-index: 2;
-        }
-
-        .project-content {
-            padding: 2rem;
-        }
-
-        .project-category {
-            display: inline-block;
-            padding: 0.4rem 1rem;
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--navy-accent);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .project-title {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--navy);
-        }
-
-        .project-description {
-            color: var(--navy-light);
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-        }
-
-        .project-stats {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-            padding: 1rem 0;
-            border-top: 1px solid var(--gray-light);
-            border-bottom: 1px solid var(--gray-light);
-        }
-
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--gray);
-            margin-bottom: 0.3rem;
-        }
-
-        .stat-value {
-            font-weight: 700;
-            color: var(--navy);
-            font-size: 1.1rem;
-        }
-
-        .project-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .tag {
-            padding: 0.3rem 0.8rem;
-            background: var(--gray-light);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: var(--navy);
-        }
-
-        .project-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .project-links a {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.7rem 1.5rem;
-            background: var(--navy);
-            color: var(--white);
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .project-links a:hover {
-            background: var(--navy-accent);
-            transform: translateX(3px);
-        }
-
-        /* Experience Timeline */
-        .experience {
-            background: var(--gray-light);
-        }
-
-        .timeline {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 100%;
-            background: var(--navy-accent);
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 3rem;
-            opacity: 0;
-        }
-
-        .timeline-content {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            width: calc(50% - 2rem);
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .timeline-item:nth-child(odd) .timeline-content {
-            margin-left: auto;
-        }
-
-        .timeline-logo {
-            width: 80px;
-            height: 80px;
-            flex-shrink: 0;
-            background: var(--gray-light);
-            border-radius: 12px;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .timeline-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .timeline-logo-fallback {
-            font-size: 2.5rem;
-        }
-
-        .timeline-text {
-            flex: 1;
-        }
-
-        .timeline-date {
-            font-weight: 600;
-            color: var(--navy-accent);
-            margin-bottom: 0.5rem;
-        }
-
-        .timeline-title {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .timeline-company {
-            color: var(--navy-light);
-            margin-bottom: 1rem;
-        }
-
-        /* Contact */
-        .contact-content {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--navy);
-        }
-
-        input, textarea {
-            padding: 1rem;
-            border: 2px solid var(--gray-light);
-            border-radius: 10px;
-            font-family: 'Inter', sans-serif;
-            transition: border-color 0.3s;
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--navy-accent);
-        }
-
-        textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .submit-button {
-            padding: 1rem 2rem;
-            background: var(--navy);
-            color: var(--white);
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.3s;
-        }
-
-        .submit-button:hover {
-            background: var(--navy-accent);
-            transform: translateY(-2px);
-        }
-
-        /* Footer */
-        footer {
-            background: var(--navy);
-            color: var(--white);
-            text-align: center;
-            padding: 2rem 0;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .social-links a {
-            color: var(--white);
-            text-decoration: none;
-            font-size: 1.5rem;
-            transition: color 0.3s;
-        }
-
-        .social-links a:hover {
-            color: var(--navy-accent);
-        }
-
-        @keyframes fadeInUp {
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        @media (max-width: 768px) {
-            .hero h1 {
+        .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-gray);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .main-title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .main-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+        }
+
+        .typing-text {
+            display: inline-block;
+            border-right: 2px solid var(--accent-green);
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { border-color: transparent; }
+            50% { border-color: var(--accent-green); }
+        }
+
+        /* Navigation Cards Grid */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            width: 100%;
+            margin-bottom: 3rem;
+        }
+
+        .nav-card {
+            background: var(--card-bg);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            padding: 2.5rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .nav-card:nth-child(1) { animation-delay: 0.1s; }
+        .nav-card:nth-child(2) { animation-delay: 0.2s; }
+        .nav-card:nth-child(3) { animation-delay: 0.3s; }
+        .nav-card:nth-child(4) { animation-delay: 0.4s; }
+        .nav-card:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 0;
+        }
+
+        .nav-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .nav-card:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 255, 136, 0.3);
+        }
+
+        .nav-card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .nav-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .nav-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+            line-height: 1.5;
+        }
+
+        .nav-arrow {
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            color: var(--accent-green);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.4s;
+        }
+
+        .nav-card:hover .nav-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Market Stats */
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            max-width: 1200px;
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-gray);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .nav-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+
+            .main-title {
                 font-size: 2.5rem;
             }
 
-            .about-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
+            .market-stats {
+                grid-template-columns: repeat(2, 1fr);
             }
+        }
 
-            .profile-image-container {
-                max-width: 250px;
-                margin: 0 auto;
-            }
-
-            .expertise-list {
+        @media (max-width: 640px) {
+            .nav-grid {
                 grid-template-columns: 1fr;
             }
 
-            .timeline::before {
-                left: 0;
+            .main-title {
+                font-size: 2rem;
             }
 
-            .timeline-content {
-                width: 100%;
-                margin-left: 2rem !important;
-            }
-
-            .timeline-logo {
-                width: 60px;
-                height: 60px;
-            }
-
-            .timeline-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            nav ul {
-                gap: 1rem;
-                font-size: 0.9rem;
-            }
-
-            .nav-left {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
-            }
-
-            nav .container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .language-switcher {
-                align-self: flex-end;
-            }
-
-            .projects-grid {
+            .market-stats {
                 grid-template-columns: 1fr;
             }
 
-            .project-stats {
-                flex-direction: column;
-                gap: 1rem;
+            .lang-switcher {
+                top: 1rem;
+                right: 1rem;
+            }
+        }
+
+        /* Loading Animation */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker-bg);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .loader-text {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-green);
+            font-size: 1.2rem;
+        }
+
+        .loader-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loader-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+            width: 0%;
+            animation: loadProgress 2s ease-out forwards;
+        }
+
+        @keyframes loadProgress {
+            to { width: 100%; }
+        }
+
+        .page-loader.hidden {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <div class="container">
-            <div class="nav-left">
-                <div class="logo">Portfolio</div>
-                <ul>
-                    <li><a href="#hero" data-fr="Accueil" data-en="Home">Accueil</a></li>
-                    <li><a href="#about" data-fr="À propos" data-en="About">À propos</a></li>
-                    <li><a href="#projects" data-fr="Projets" data-en="Projects">Projets</a></li>
-                    <li><a href="#experience" data-fr="Expérience" data-en="Experience">Expérience</a></li>
-                    <li><a href="#contact" data-fr="Contact" data-en="Contact">Contact</a></li>
-                </ul>
-            </div>
-            <div class="nav-right">
-                <div class="language-switcher">
-                    <button class="lang-btn active" data-lang="fr">🇫🇷 FR</button>
-                    <button class="lang-btn" data-lang="en">🇬🇧 EN</button>
+    <!-- Page Loader -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-text">LOADING TRADING FLOOR...</div>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="trading-bg">
+        <div class="grid-lines"></div>
+        <canvas id="chartCanvas" class="chart-lines"></canvas>
+    </div>
+
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="fr">🇫🇷 FR</button>
+        <button class="lang-btn" data-lang="en">🇬🇧 EN</button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- System Header -->
+        <div class="system-header">
+            <div class="status-bar">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span>SYSTEM ONLINE</span>
                 </div>
+                <span>|</span>
+                <span id="currentTime">--:--:--</span>
+                <span>|</span>
+                <span>PARIS TRADING FLOOR</span>
+            </div>
+            <h1 class="main-title">STANISLAS DE CHEZELLES</h1>
+            <div class="main-subtitle">
+                <span class="typing-text" id="typingText"></span>
             </div>
         </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section id="hero" class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Stanislas de Chezelles</h1>
-                <div class="subtitle" id="typewriter"></div>
-                <p>Spécialisé en finance quantitative et data science, je développe des solutions innovantes pour l'analyse financière, le trading algorithmique et la gestion de portefeuille.</p>
-                <a href="#projects" class="cta-button">Voir mes projets</a>
+        <!-- Navigation Grid -->
+        <div class="nav-grid">
+            <a href="#about" class="nav-card" data-page="about">
+                <div class="nav-card-content">
+                    <span class="nav-icon">📊</span>
+                    <h3 class="nav-title" data-fr="PROFIL" data-en="PROFILE">PROFIL</h3>
+                    <p class="nav-subtitle" data-fr="Expertise & Compétences" data-en="Expertise & Skills">Expertise & Compétences</p>
+                    <span class="nav-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="#projects" class="nav-card" data-page="projects">
+                <div class="nav-card-content">
+                    <span class="nav-icon">💼</span>
+                    <h3 class="nav-title" data-fr="PROJETS" data-en="PROJECTS">PROJETS</h3>
+                    <p class="nav-subtitle" data-fr="Portfolio Finance Quant" data-en="Quant Finance Portfolio">Portfolio Finance Quant</p>
+                    <span class="nav-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="#stats" class="nav-card" data-page="stats">
+                <div class="nav-card-content">
+                    <span class="nav-icon">📈</span>
+                    <h3 class="nav-title" data-fr="STATISTIQUES" data-en="STATISTICS">STATISTIQUES</h3>
+                    <p class="nav-subtitle" data-fr="Performances & Métriques" data-en="Performance & Metrics">Performances & Métriques</p>
+                    <span class="nav-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="#skills" class="nav-card" data-page="skills">
+                <div class="nav-card-content">
+                    <span class="nav-icon">📚</span>
+                    <h3 class="nav-title" data-fr="OUTILS" data-en="TOOLS">OUTILS</h3>
+                    <p class="nav-subtitle" data-fr="Technologies & Stack" data-en="Technologies & Stack">Technologies & Stack</p>
+                    <span class="nav-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="#experience" class="nav-card" data-page="experience">
+                <div class="nav-card-content">
+                    <span class="nav-icon">💹</span>
+                    <h3 class="nav-title" data-fr="PARCOURS" data-en="CAREER">PARCOURS</h3>
+                    <p class="nav-subtitle" data-fr="Expérience Professionnelle" data-en="Professional Experience">Expérience Professionnelle</p>
+                    <span class="nav-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="#contact" class="nav-card" data-page="contact">
+                <div class="nav-card-content">
+                    <span class="nav-icon">📧</span>
+                    <h3 class="nav-title" data-fr="CONTACT" data-en="CONTACT">CONTACT</h3>
+                    <p class="nav-subtitle" data-fr="Prenons contact" data-en="Get in touch">Prenons contact</p>
+                    <span class="nav-arrow">→</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Market Stats -->
+        <div class="market-stats">
+            <div class="stat-card">
+                <div class="stat-label">Projects</div>
+                <div class="stat-value">12+</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Experience</div>
+                <div class="stat-value">3Y</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Technologies</div>
+                <div class="stat-value">15+</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Success Rate</div>
+                <div class="stat-value">98%</div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <h2>À propos</h2>
-            <div class="about-content">
-                <div class="profile-image-container">
-                    <img src="resources/ma-photo.jpg" alt="Stanislas de Chezelles" class="profile-image" 
-                         onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'width:100%;aspect-ratio:1;background:linear-gradient(135deg,#1e293b,#3b82f6);border-radius:20px;display:flex;align-items:center;justify-content:center;color:white;font-size:4rem;font-weight:700;box-shadow:0 20px 60px rgba(0,0,0,0.2);border:5px solid white;\'>📊</div>'">
-                </div>
-                <div class="about-text">
-                    <h3>Etudiant en deuxième année à l'ENSAE Paris</h3>
-                    <p>Passionné par la finance quantitative et l'analyse de données, je combine expertise financière et modélisation mathématiques pour créer des solutions innovantes dans le domaine de la finance.</p>
-                    <p>Mon approche allie rigueur analytique, maîtrise des outils de data science et compréhension approfondie des marchés financiers pour générer des insights actionnables.</p>
-                    
-                    <div class="expertise-list">
-                        <div class="expertise-item">Modélisation financière</div>
-                        <div class="expertise-item">Analyse quantitative</div>
-                        <div class="expertise-item">Machine Learning</div>
-                        <div class="expertise-item">Gestion de portefeuille</div>
-                        <div class="expertise-item">Python / R</div>
-                        <div class="expertise-item">Visualisation de données</div>
-                    </div>
-                </div>
-            </div>
+    <!-- Ticker Tape -->
+    <div class="ticker-tape">
+        <div class="ticker-content" id="tickerContent">
+            <!-- Will be populated by JS -->
         </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="projects">
-        <div class="container">
-            <div class="projects-header">
-                <h2>Projets Finance</h2>
-                <p>Découvrez mes projets alliant finance quantitative, analyse de données et technologies modernes</p>
-            </div>
-            
-            <div class="projects-filter">
-                <button class="filter-btn active">Tous</button>
-                <button class="filter-btn">Trading</button>
-                <button class="filter-btn">Portfolio</button>
-                <button class="filter-btn">Analyse</button>
-                <button class="filter-btn">ML Finance</button>
-            </div>
-
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="resources/logo_qrt.jpg" alt="QRT Data Challenge" class="project-logo" 
-                             onerror="this.outerHTML='<div style=\'font-size:4rem;\'>📈</div>'">
-                    </div>
-                    <div class="project-content">
-                        <span class="project-category">Gestion de portefeuille</span>
-                        <h3 class="project-title"> Asset Allocation Performance forecasting</h3>
-                        <p class="project-description">Machine learning and statistical modeling in predicting daily asset allocation performance, identifying portfolios to
-long or short in a systematic trading context.</p>
-                        <div class="project-stats">
-                            <div class="stat-item">
-                                <span class="stat-label">Performance</span>
-                                <span class="stat-value">+23.5%</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Sharpe Ratio</span>
-                                <span class="stat-value">1.85</span>
-                            </div>
-                        </div>
-                        <div class="project-tags">
-                            <span class="tag">Python</span>
-                            <span class="tag">Pandas</span>
-                            <span class="tag">Backtrader</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#">→ Voir le code</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="resources/logo-hi-paris.jpg" alt="Hi!Paris DataBoot Camp" class="project-logo"
-                             onerror="this.outerHTML='<div style=\'font-size:4rem;\'>💼</div>'">
-                    </div>
-                    <div class="project-content">
-                        <span class="project-category">RUL Spaceshift</span>
-                        <h3 class="project-title">Algorithme de classification avec du Deeplearning</h3>
-                        <p class="project-description">Outil d'optimisation de portefeuille utilisant la théorie moderne du portefeuille et l'algorithme de Markowitz pour maximiser le ratio rendement/risque.</p>
-                        <div class="project-stats">
-                            <div class="stat-item">
-                                <span class="stat-label">Assets</span>
-                                <span class="stat-value">50+</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Optimisation</span>
-                                <span class="stat-value">Real-time</span>
-                            </div>
-                        </div>
-                        <div class="project-tags">
-                            <span class="tag">Python</span>
-                            <span class="tag">NumPy</span>
-                            <span class="tag">Scipy</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#">→ Voir le code</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="resources/logo-quantcube.jpg" alt="SSSSSS" class="project-logo"
-                             onerror="this.outerHTML='<div style=\'font-size:4rem;\'>🤖</div>'">
-                    </div>
-                    <div class="project-content">
-                        <span class="project-category">Machine Learning</span>
-                        <h3 class="project-title">Prédiction de Prix d'Actions</h3>
-                        <p class="project-description">Modèle de deep learning utilisant des réseaux LSTM pour prédire les prix futurs d'actions en analysant les données historiques et les indicateurs techniques.</p>
-                        <div class="project-stats">
-                            <div class="stat-item">
-                                <span class="stat-label">Précision</span>
-                                <span class="stat-value">87%</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Data Points</span>
-                                <span class="stat-value">100K+</span>
-                            </div>
-                        </div>
-                        <div class="project-tags">
-                            <span class="tag">TensorFlow</span>
-                            <span class="tag">LSTM</span>
-                            <span class="tag">Keras</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#">→ Voir le code</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="resources/logo-dashboard.png" alt="Dashboard" class="project-logo"
-                             onerror="this.outerHTML='<div style=\'font-size:4rem;\'>📊</div>'">
-                    </div>
-                    <div class="project-content">
-                        <span class="project-category">Analyse de Données</span>
-                        <h3 class="project-title">Dashboard Financier Interactif</h3>
-                        <p class="project-description">Tableau de bord interactif pour visualiser et analyser les données financières en temps réel avec des indicateurs clés de performance et des graphiques personnalisables.</p>
-                        <div class="project-stats">
-                            <div class="stat-item">
-                                <span class="stat-label">Métriques</span>
-                                <span class="stat-value">25+</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Update</span>
-                                <span class="stat-value">Real-time</span>
-                            </div>
-                        </div>
-                        <div class="project-tags">
-                            <span class="tag">Python</span>
-                            <span class="tag">Streamlit</span>
-                            <span class="tag">Plotly</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#">→ Voir le code</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="resources/logo-risk.png" alt="Risk Management" class="project-logo"
-                             onerror="this.outerHTML='<div style=\'font-size:4rem;\'>⚖️</div>'">
-                    </div>
-                    <div class="project-content">
-                        <span class="project-category">Risk Management</span>
-                        <h3 class="project-title">Analyse de Risque de Crédit</h3>
-                        <p class="project-description">Modèle de scoring et d'évaluation du risque de crédit utilisant des algorithmes de machine learning pour prédire la probabilité de défaut.</p>
-                        <div class="project-stats">
-                            <div class="stat-item">
-                                <span class="stat-label">AUC Score</span>
-                                <span class="stat-value">0.92</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Features</span>
-                                <span class="stat-value">50+</span>
-                            </div>
-                        </div>
-                        <div class="project-tags">
-                            <span class="tag">Python</span>
-                            <span class="tag">XGBoost</span>
-                            <span class="tag">Scikit-learn</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#">→ Voir le code</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="resources/logo-sentiment.png" alt="Sentiment Analysis" class="project-logo"
-                             onerror="this.outerHTML='<div style=\'font-size:4rem;\'>💹</div>'">
-                    </div>
-                    <div class="project-content">
-                        <span class="project-category">Market Analysis</span>
-                        <h3 class="project-title">Analyse de Sentiment de Marché</h3>
-                        <p class="project-description">Outil d'analyse de sentiment utilisant le NLP pour extraire et analyser les sentiments des actualités financières et leur impact sur les marchés.</p>
-                        <div class="project-stats">
-                            <div class="stat-item">
-                                <span class="stat-label">Sources</span>
-                                <span class="stat-value">20+</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Articles/jour</span>
-                                <span class="stat-value">1000+</span>
-                            </div>
-                        </div>
-                        <div class="project-tags">
-                            <span class="tag">Python</span>
-                            <span class="tag">NLP</span>
-                            <span class="tag">BERT</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#">→ Voir le code</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="experience">
-        <div class="container">
-            <h2>Expérience</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="timeline-logo">
-                            <img src="resources/qrt_logo.png" alt="Entreprise 1" 
-                                 onerror="this.parentElement.innerHTML='<div class=\'timeline-logo-fallback\'>💼</div>'">
-                        </div>
-                        <div class="timeline-text">
-                            <div class="timeline-date">202 - Présent</div>
-                            <h3 class="timeline-title">Analyste Quantitatif</h3>
-                            <div class="timeline-company">Société de Gestion d'Actifs</div>
-                            <p>Développement de modèles quantitatifs pour l'optimisation de portefeuille et l'analyse de risque. Création de stratégies de trading algorithmique.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="timeline-logo">
-                            <img src="resources/logo-exp2.png" alt="Entreprise 2"
-                                 onerror="this.parentElement.innerHTML='<div class=\'timeline-logo-fallback\'>🏦</div>'">
-                        </div>
-                        <div class="timeline-text">
-                            <div class="timeline-date">2021 - 2023</div>
-                            <h3 class="timeline-title">Data Analyst Finance</h3>
-                            <div class="timeline-company">Banque d'Investissement</div>
-                            <p>Analyse de données financières, création de dashboards et reporting pour l'aide à la décision. Automatisation des processus d'analyse.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="timeline-logo">
-                            <img src="resources/logo-exp3.png" alt="École"
-                                 onerror="this.parentElement.innerHTML='<div class=\'timeline-logo-fallback\'>🎓</div>'">
-                        </div>
-                        <div class="timeline-text">
-                            <div class="timeline-date">2019 - 2021</div>
-                            <h3 class="timeline-title">Formation Finance & Data Science</h3>
-                            <div class="timeline-company">Grande École</div>
-                            <p>Formation approfondie en finance quantitative, statistiques et machine learning appliqués à la finance.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact">
-        <div class="container">
-            <h2>Contact</h2>
-            <div class="contact-content">
-                <form class="contact-form">
-                    <div class="form-group">
-                        <label for="name">Nom</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" required></textarea>
-                    </div>
-                    <button type="submit" class="submit-button">Envoyer</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="social-links">
-                <a href="https://github.com/stanislas-dechezelles" target="_blank">GitHub</a>
-                <a href="#" target="_blank">LinkedIn</a>
-                <a href="#" target="_blank">Twitter</a>
-            </div>
-            <p>&copy; 2025 Stanislas de Chezelles. Tous droits réservés.</p>
-        </div>
-    </footer>
+    </div>
 
     <script>
-        // Language data
-        const translations = {
-            fr: {
-                heroSubtitles: ["Analyste Quantitatif", "Data Scientist Finance", "Passionné de Finance Quant"],
-                heroCta: "Voir mes projets",
-                aboutTitle: "À propos",
-                aboutJobTitle: "Analyste Financier & Data Scientist",
-                projectsTitle: "Projets Finance",
-                projectsSubtitle: "Découvrez mes projets alliant finance quantitative, analyse de données et technologies modernes",
-                filterAll: "Tous",
-                experienceTitle: "Expérience",
-                contactTitle: "Contact",
-                contactName: "Nom",
-                contactEmail: "Email",
-                contactMessage: "Message",
-                contactSubmit: "Envoyer",
-                footerRights: "Tous droits réservés"
-            },
-            en: {
-                heroSubtitles: ["Quantitative Analyst", "Finance Data Scientist", "Quant Finance Enthusiast"],
-                heroCta: "View my projects",
-                aboutTitle: "About",
-                aboutJobTitle: "Financial Analyst & Data Scientist",
-                projectsTitle: "Finance Projects",
-                projectsSubtitle: "Discover my projects combining quantitative finance, data analysis and modern technologies",
-                filterAll: "All",
-                experienceTitle: "Experience",
-                contactTitle: "Contact",
-                contactName: "Name",
-                contactEmail: "Email",
-                contactMessage: "Message",
-                contactSubmit: "Send",
-                footerRights: "All rights reserved"
-            }
-        };
-
-        let currentLang = 'fr';
-
-        // Language switcher
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const lang = this.dataset.lang;
-                if (lang === currentLang) return;
-                
-                currentLang = lang;
-                
-                // Update active button
-                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Update navigation
-                document.querySelectorAll('nav a').forEach(link => {
-                    link.textContent = link.dataset[lang];
-                });
-                
-                // Update content
-                switchLanguage(lang);
-            });
+        // Page Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('pageLoader').classList.add('hidden');
+            }, 2000);
         });
 
-        function switchLanguage(lang) {
-            const t = translations[lang];
-            
-            // Update hero
-            document.querySelector('.cta-button').textContent = t.heroCta;
-            
-            // Update section titles
-            document.querySelector('#about h2').textContent = t.aboutTitle;
-            document.querySelector('.about-text h3').textContent = t.aboutJobTitle;
-            document.querySelector('.projects-header h2').textContent = t.projectsTitle;
-            document.querySelector('.projects-header p').textContent = t.projectsSubtitle;
-            document.querySelector('#experience h2').textContent = t.experienceTitle;
-            document.querySelector('#contact h2').textContent = t.contactTitle;
-            
-            // Update filter button
-            document.querySelector('.filter-btn.active').textContent = t.filterAll;
-            
-            // Update contact form
-            document.querySelector('label[for="name"]').textContent = t.contactName;
-            document.querySelector('label[for="email"]').textContent = t.contactEmail;
-            document.querySelector('label[for="message"]').textContent = t.contactMessage;
-            document.querySelector('.submit-button').textContent = t.contactSubmit;
-            
-            // Update footer
-            const footerText = document.querySelector('footer p');
-            footerText.textContent = `© 2025 Stanislas de Chezelles. ${t.footerRights}.`;
-            
-            // Restart typewriter with new language
-            texts = t.heroSubtitles;
-            textIndex = 0;
-            charIndex = 0;
-            isDeleting = false;
+        // Current Time
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('fr-FR', { hour12: false });
+            document.getElementById('currentTime').textContent = timeStr;
         }
+        updateTime();
+        setInterval(updateTime, 1000);
 
-        // Typewriter effect
-        let texts = translations.fr.heroSubtitles;
+        // Typing Effect
+        const texts = {
+            fr: ["ANALYSTE QUANTITATIF", "DATA SCIENTIST FINANCE", "PASSIONNÉ DE FINANCE QUANT"],
+            en: ["QUANTITATIVE ANALYST", "FINANCE DATA SCIENTIST", "QUANT FINANCE ENTHUSIAST"]
+        };
+        let currentLang = 'fr';
         let textIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
-        const typewriterElement = document.getElementById('typewriter');
+        const typingElement = document.getElementById('typingText');
 
         function typeWriter() {
-            const currentText = texts[textIndex];
+            const currentTexts = texts[currentLang];
+            const currentText = currentTexts[textIndex];
             
             if (!isDeleting) {
-                typewriterElement.textContent = currentText.substring(0, charIndex + 1);
+                typingElement.textContent = currentText.substring(0, charIndex + 1);
                 charIndex++;
                 
                 if (charIndex === currentText.length) {
@@ -1134,12 +628,12 @@ long or short in a systematic trading context.</p>
                     return;
                 }
             } else {
-                typewriterElement.textContent = currentText.substring(0, charIndex - 1);
+                typingElement.textContent = currentText.substring(0, charIndex - 1);
                 charIndex--;
                 
                 if (charIndex === 0) {
                     isDeleting = false;
-                    textIndex = (textIndex + 1) % texts.length;
+                    textIndex = (textIndex + 1) % currentTexts.length;
                     setTimeout(typeWriter, 500);
                     return;
                 }
@@ -1150,51 +644,109 @@ long or short in a systematic trading context.</p>
 
         typeWriter();
 
-        // Filter buttons
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        filterBtns.forEach(btn => {
+        // Ticker Tape
+        const tickerData = [
+            { symbol: 'BTC', price: '42,150', change: '+2.3%', positive: true },
+            { symbol: 'ETH', price: '2,245', change: '+1.8%', positive: true },
+            { symbol: 'SPY', price: '445.20', change: '-0.5%', positive: false },
+            { symbol: 'QQQ', price: '378.45', change: '+0.8%', positive: true },
+            { symbol: 'AAPL', price: '178.25', change: '+1.2%', positive: true },
+            { symbol: 'TSLA', price: '242.80', change: '-1.5%', positive: false },
+            { symbol: 'MSFT', price: '378.90', change: '+0.6%', positive: true },
+            { symbol: 'GOOGL', price: '142.15', change: '+0.4%', positive: true }
+        ];
+
+        function createTicker() {
+            const ticker = document.getElementById('tickerContent');
+            const tickerHTML = tickerData.map(item => `
+                <div class="ticker-item">
+                    <span class="ticker-symbol">${item.symbol}</span>
+                    <span class="ticker-price">$${item.price}</span>
+                    <span class="ticker-change ${item.positive ? 'positive' : 'negative'}">${item.change}</span>
+                </div>
+            `).join('');
+            
+            // Duplicate for seamless loop
+            ticker.innerHTML = tickerHTML + tickerHTML;
+        }
+
+        createTicker();
+
+        // Canvas Chart Animation
+        const canvas = document.getElementById('chartCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const lines = [];
+        for (let i = 0; i < 3; i++) {
+            lines.push({
+                points: [],
+                color: i === 0 ? '#00ff8850' : i === 1 ? '#00d4ff50' : '#ff6b3550'
+            });
+        }
+
+        function drawChart() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            lines.forEach(line => {
+                if (line.points.length === 0 || Math.random() < 0.1) {
+                    line.points.push({
+                        x: canvas.width,
+                        y: Math.random() * canvas.height
+                    });
+                }
+                
+                line.points.forEach(point => {
+                    point.x -= 1;
+                });
+                
+                line.points = line.points.filter(p => p.x > 0);
+                
+                if (line.points.length > 1) {
+                    ctx.strokeStyle = line.color;
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(line.points[0].x, line.points[0].y);
+                    
+                    for (let i = 1; i < line.points.length; i++) {
+                        ctx.lineTo(line.points[i].x, line.points[i].y);
+                    }
+                    
+                    ctx.stroke();
+                }
+            });
+            
+            requestAnimationFrame(drawChart);
+        }
+
+        drawChart();
+
+        // Language Switcher
+        document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                filterBtns.forEach(b => b.classList.remove('active'));
+                const lang = this.dataset.lang;
+                if (lang === currentLang) return;
+                
+                currentLang = lang;
+                
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
+                
+                document.querySelectorAll('[data-fr][data-en]').forEach(el => {
+                    el.textContent = el.dataset[lang];
+                });
+                
+                textIndex = 0;
+                charIndex = 0;
+                isDeleting = false;
             });
         });
 
-        // Scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }, index * 100);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.project-card, .timeline-item').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Form submission
-        document.querySelector('.contact-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Message envoyé ! (simulation)');
-        });
-
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
+        // Resize handler
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         });
     </script>
 </body>
